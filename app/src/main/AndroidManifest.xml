@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Draftable"
         tools:targetApi="31">
         <activity
-            android:name=".view.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Draftable">
             <intent-filter>

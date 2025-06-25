@@ -1,4 +1,4 @@
-package de.karelwhite.draftable.view
+package de.karelwhite.draftable
 
 
 import android.os.Bundle
@@ -8,8 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import de.karelwhite.draftable.AppDestinations
 import de.karelwhite.draftable.ui.theme.DraftableTheme
+import de.karelwhite.draftable.view.CreateTournamentScreen
+import de.karelwhite.draftable.view.SettingsScreen
+import de.karelwhite.draftable.view.StartScreen
+import de.karelwhite.draftable.view.TournamentHistoryScreen
+import de.karelwhite.draftable.view.ViewTournamentsScreen
 
 // MainActivity.kt
 class MainActivity : ComponentActivity() {
