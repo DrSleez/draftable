@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "de.karelwhite.draftable"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "de.karelwhite.draftable"
@@ -37,6 +37,7 @@ android {
     buildFeatures {
         compose = true
     }
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {
