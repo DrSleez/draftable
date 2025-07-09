@@ -5,17 +5,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import de.karelwhite.draftable.ui.theme.DraftableTheme
 import de.karelwhite.draftable.view.CreateTournamentScreen
+import de.karelwhite.draftable.view.HostTournamentScreen
+import de.karelwhite.draftable.view.MyTournamentsScreen
 import de.karelwhite.draftable.view.SettingsScreen
+import de.karelwhite.draftable.view.SharedTournamentScreen
 import de.karelwhite.draftable.view.StartScreen
-import de.karelwhite.draftable.view.TournamentHistoryScreen
-import de.karelwhite.draftable.view.ViewTournamentsScreen
+import de.karelwhite.draftable.viewmodel.createtournament.CreateTournamentViewModel
+import de.karelwhite.draftable.viewmodel.mytournaments.MyTournamentsViewModel
+import de.karelwhite.draftable.viewmodel.settings.SettingsViewModel
+import de.karelwhite.draftable.viewmodel.start.StartViewModel
+
 
 // MainActivity.kt
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,20 +45,25 @@ fun AppNavigation() {
         startDestination = AppDestinations.START_SCREEN_ROUTE // Set your initial screen
     ) {
         composable(route = AppDestinations.START_SCREEN_ROUTE) {
-            StartScreen(navController)
+            val startViewModel: StartViewModel = hiltViewModel()
+            StartScreen(startViewModel,navController)
         }
         composable(route = AppDestinations.CREATE_TOURNAMENT_ROUTE) {
-            CreateTournamentScreen(navController) // Pass navController to this screen
+            val createTournamentViewModel: CreateTournamentViewModel = hiltViewModel()
+            CreateTournamentScreen(createTournamentViewModel ,navController)
         }
-        composable(route = AppDestinations.FIND_TOURNAMENTS_ROUTE) {
-            ViewTournamentsScreen(navController)
+        composable(route = AppDestinations.HOST_TOURNAMENTS) {
+            val myTournamentsViewModel: MyTournamentsViewModel = hiltViewModel()
+            MyTournamentsScreen(myTournamentsViewModel, navController)
+        }
+        composable(route = AppDestinations.SHARED_TOURNAMENTS) {
+            SharedTournamentScreen(navController)
         }
         composable(route = AppDestinations.SETTINGS_ROUTE) {
-            SettingsScreen(navController)
+            val settingsViewModel: SettingsViewModel = hiltViewModel()
+            SettingsScreen(settingsViewModel,navController)
         }
-        composable(route = AppDestinations.TOURNAMENT_HISTORY_ROUTE) {
-            TournamentHistoryScreen(navController)
-        }
+
         // Add more composable(route = ...) blocks for other screens
     }
 }

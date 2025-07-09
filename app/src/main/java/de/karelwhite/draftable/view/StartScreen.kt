@@ -33,14 +33,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import de.karelwhite.draftable.AppDestinations
 import de.karelwhite.draftable.R
 import de.karelwhite.draftable.ui.theme.DraftableTheme
+import de.karelwhite.draftable.viewmodel.start.StartViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartScreen(
+    viewModel: StartViewModel = viewModel(),
     navController: NavController,
 ) {
     Scaffold(
@@ -98,18 +101,18 @@ fun StartScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             ActionButton(
-                text = "Trete einem Turnier bei",
+                text = "Deine Turniere",
                 icon = Icons.Filled.Share,
-                onClick = {navController.navigate(AppDestinations.FIND_TOURNAMENTS_ROUTE)},
+                onClick = {navController.navigate(AppDestinations.HOST_TOURNAMENTS)},
                 modifier = Modifier.fillMaxWidth(0.8f)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ActionButton(
-                text = "Vergangene Turniere",
+                text = "Geteilte Turniere",
                 icon = Icons.Filled.Search,
-                onClick = {navController.navigate(AppDestinations.TOURNAMENT_HISTORY_ROUTE)},
+                onClick = {navController.navigate(AppDestinations.SHARED_TOURNAMENTS)},
                 modifier = Modifier.fillMaxWidth(0.8f)
             )
         }

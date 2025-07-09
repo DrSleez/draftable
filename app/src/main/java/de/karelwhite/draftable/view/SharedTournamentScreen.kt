@@ -11,13 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 @Composable
-fun TournamentHistoryScreen(navController: NavController) { // Pass NavController to navigate back or to other screens
+fun SharedTournamentScreen(navController: NavController) { // Pass NavController to navigate back or to other screens
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Create History Screen")
+        Text("Shared Tournaments")
         // Add your UI for creating a tournament here
         Button(onClick = { navController.popBackStack() }) { // Example: Navigate back
             Text("Go Back")
