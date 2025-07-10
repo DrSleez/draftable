@@ -37,7 +37,8 @@ fun Player.toEntity(): PlayerEntity {
         matchesWon = this.matchesWon,
         matchesLost = this.matchesLost,
         matchesDrawn = this.matchesDrawn,
-        isDropped = this.isDropped
+        isDropped = this.isDropped,
+        opponentHistory = this.opponentHistory
     )
 }
 
@@ -103,7 +104,8 @@ fun PlayerEntity.toDomain(): Player {
         matchesWon = this.matchesWon,
         matchesLost = this.matchesLost,
         matchesDrawn = this.matchesDrawn,
-        isDropped = this.isDropped
+        isDropped = this.isDropped,
+        opponentHistory = this.opponentHistory
     )
 }
 

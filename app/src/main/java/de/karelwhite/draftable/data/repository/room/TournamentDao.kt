@@ -19,11 +19,11 @@ interface TournamentDao {
     suspend fun deleteTournament(tournament: TournamentEntity)
 
     @Query("SELECT * FROM my_tournaments")
-    suspend fun getAllTournaments(): List<TournamentEntity>?
+    suspend fun getAllTournaments(): List<TournamentEntity>
 
     @Query("SELECT * FROM my_tournaments WHERE id = :id")
     suspend fun getTournamentById(id: String) : TournamentEntity?
 
     @Query("SELECT * FROM my_tournaments WHERE hostPlayerId = :hostId")
-    suspend fun getAllTournamentsByHostId(hostId: String) : List<TournamentEntity>?
+    suspend fun getAllTournamentsByHostId(hostId: String) : List<TournamentEntity>
 }

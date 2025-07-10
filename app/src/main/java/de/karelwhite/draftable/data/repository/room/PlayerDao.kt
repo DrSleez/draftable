@@ -18,5 +18,5 @@ interface PlayerDao {
     @Delete
     suspend fun deletePlayer(player: PlayerEntity)
     @Query("SELECT * FROM my_players WHERE tournament_id = :tournamentId")
-    suspend fun getPlayersForTournament(tournamentId: String): List<PlayerEntity>?
+    suspend fun getPlayersForTournament(tournamentId: String): List<PlayerEntity>
 }

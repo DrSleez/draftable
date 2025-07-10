@@ -8,9 +8,12 @@ data class Tournament(
     val name: String,
     var hostPlayerId: String, // ID of the player who created it
     val players: List<Player> = emptyList(),
-    var matches: MutableList<Match>? = mutableListOf(),
+    val matches: List<Match> = emptyList(),
     var currentRound: Int = 0,
     var isStarted: Boolean = false,
     var isFinished: Boolean = false,
-    val numberOfRounds: Int = 3 // Example, can be calculated based on players
+    val numberOfRounds: Int = 3,
+    val pointsForWin: Int = 3,
+    val pointsForDraw: Int = 1,
+    val pointsForLoss: Int = 0
 )

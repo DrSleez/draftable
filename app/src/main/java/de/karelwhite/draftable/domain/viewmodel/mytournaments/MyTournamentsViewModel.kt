@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.karelwhite.draftable.domain.repository.HostRepository
 import de.karelwhite.draftable.domain.repository.TournamentRepository
-import de.karelwhite.draftable.domain.viewmodel.createtournament.CreateTournamentNavigationEvent
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +21,8 @@ class MyTournamentsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(MyTournamentsState())
     val uiState: StateFlow<MyTournamentsState> = _uiState.asStateFlow()
 
-    private val _navigationEvent = Channel<MyTournamentsNavigationEvent>()
+
+
 
     fun onEvent(event: MyTournamentsEvent){
         when(event){
@@ -38,8 +37,6 @@ class MyTournamentsViewModel @Inject constructor(
             }
             MyTournamentsEvent.RefreshTournaments -> {
                 loadHostAndAssociatedTournaments()
-            }
-            is MyTournamentsEvent.TournamentClicked -> {
             }
         }
     }
@@ -109,13 +106,11 @@ class MyTournamentsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val tournaments = tournamentRepository.getAllTournamentsByHostId(hostId)
-                if (tournaments == null) { // Oder tournaments.isEmpty() je nach Repository-Logik
+                if (tournaments == null) {
                     _uiState.update { currentState ->
                         currentState.copy(
                             isLoading = false,
-                            tournaments = emptyList(), // Leere Liste, wenn keine Turniere da sind
-                            // Optional: spezifische Nachricht, wenn keine Turniere für den Host da sind
-                            // toastMessage = "Keine Turniere für ${currentState.host?.name ?: "diesen Host"} verfügbar."
+                            tournaments = emptyList(),
                         )
                     }
                 } else {
@@ -123,7 +118,7 @@ class MyTournamentsViewModel @Inject constructor(
                         currentState.copy(
                             isLoading = false,
                             tournaments = tournaments,
-                            error = null // Fehler zurücksetzen, falls vorher einer da war
+                            error = null
                         )
                     }
                 }

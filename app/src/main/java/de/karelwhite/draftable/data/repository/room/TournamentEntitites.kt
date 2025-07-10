@@ -38,6 +38,7 @@ data class PlayerEntity(
     var matchesLost: Int = 0,
     var matchesDrawn: Int = 0,
     var isDropped: Boolean = false,
+    var opponentHistory: List<String> = emptyList(),
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     @ColumnInfo(name = "tournament_id") val tournamentId: String,
 )

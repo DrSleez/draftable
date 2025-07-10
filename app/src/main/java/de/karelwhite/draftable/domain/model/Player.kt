@@ -11,5 +11,6 @@ data class Player(
     var matchesWon: Int = 0,
     var matchesLost: Int = 0,
     var matchesDrawn: Int = 0,
-    var isDropped: Boolean = false
+    var isDropped: Boolean = false,
+    var opponentHistory: List<String> = emptyList()
 )

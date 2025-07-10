@@ -1,10 +1,8 @@
 package de.karelwhite.draftable.data.repository.local
 
-import de.karelwhite.draftable.data.repository.room.HostDao
+
 import de.karelwhite.draftable.data.repository.room.MatchDao
-import de.karelwhite.draftable.data.repository.room.MatchEntity
 import de.karelwhite.draftable.data.repository.room.PlayerDao
-import de.karelwhite.draftable.data.repository.room.PlayerEntity
 import de.karelwhite.draftable.data.repository.room.TournamentDao
 import de.karelwhite.draftable.data.repository.room.TournamentEntity
 import de.karelwhite.draftable.data.repository.room.toDomain
@@ -24,9 +22,9 @@ class TournamentRepositoryRoomImp @Inject constructor(
         withContext(Dispatchers.IO){
             tournamentDao.insertTournament(tournament.toEntity())
             tournament.players.map { playerDao.insertPlayer(it.toEntity()) }
-            if (tournament.matches != null){
+            if (tournament.matches.isNotEmpty()){
                 val entityMatches = tournament.matches
-                entityMatches?.map {
+                entityMatches.map {
                     matchDao.insertMatch(it.toEntity())
                 }
             }
@@ -40,7 +38,7 @@ class TournamentRepositoryRoomImp @Inject constructor(
             allTournaments.map { tournament ->
                 val players = playerDao.getPlayersForTournament(tournament.id)
                 val matches = matchDao.getAllMatchesForTournament(tournament.id)
-                if (players != null && matches != null) {
+                if (players.isNotEmpty()) {
                     domainTournaments.add(tournament.toDomain(players, matches))
                 }
                 return domainTournaments
@@ -50,16 +48,18 @@ class TournamentRepositoryRoomImp @Inject constructor(
     }
 
     override suspend fun getAllTournamentsByHostId(hostId: String): List<Tournament>? {
-        val allHostTournaments : List<TournamentEntity>? = tournamentDao.getAllTournamentsByHostId(hostId)
+        val allHostTournaments : List<TournamentEntity> = tournamentDao.getAllTournamentsByHostId(hostId)
+        println(allHostTournaments)
         val domainTournaments : MutableList<Tournament> = mutableListOf()
-        if (!allHostTournaments.isNullOrEmpty()) {
+        if (allHostTournaments.isNotEmpty()) {
             allHostTournaments.map { tournament ->
                 val players = playerDao.getPlayersForTournament(tournament.id)
                 val matches = matchDao.getAllMatchesForTournament(tournament.id)
-                if (players != null && matches != null) {
+                if (players.isNotEmpty()) {
                     domainTournaments.add(tournament.toDomain(players, matches))
                 }
             }
+            println(domainTournaments)
             return domainTournaments
         }
         return null
@@ -70,7 +70,7 @@ class TournamentRepositoryRoomImp @Inject constructor(
         if (tournament != null) {
             val players = playerDao.getPlayersForTournament(tournament.id)
             val matches = matchDao.getAllMatchesForTournament(tournament.id)
-            if (players != null && matches != null) {
+            if (players.isNotEmpty()) {
                 return tournament.toDomain(players, matches)
             }
         }
@@ -80,10 +80,10 @@ class TournamentRepositoryRoomImp @Inject constructor(
     override suspend fun updateTournament(tournament: Tournament) {
         tournamentDao.updateTournament(tournament.toEntity())
         tournament.players.map { playerDao.updatePlayer(it.toEntity()) }
-        if (tournament.matches != null){
+        if (tournament.matches.isNotEmpty()){
             val entityMatches = tournament.matches
-            entityMatches?.map {
-                matchDao.updateMatch(it.toEntity())
+            entityMatches.map {
+                matchDao.upsertMatch(it.toEntity())
             }
         }
     }
