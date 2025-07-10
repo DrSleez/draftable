@@ -69,10 +69,14 @@ fun Match.toEntity(): MatchEntity {
  */
 fun TournamentEntity.toDomain(
     players: List<PlayerEntity>,
-    matches: List<MatchEntity>
+    matches: List<MatchEntity>?
 ): Tournament {
     val domainPlayers : MutableList<Player> = players.map { it.toDomain() } as MutableList<Player>
-    val domainMatches : MutableList<Match> = matches.map { it.toDomain() } as MutableList<Match>
+    var domainMatches : MutableList<Match> = mutableListOf()
+    if (matches != null) {
+        domainMatches = matches.map { it.toDomain() } as MutableList<Match>
+    }
+
     return Tournament(
         id = this.id,
         name = this.name,

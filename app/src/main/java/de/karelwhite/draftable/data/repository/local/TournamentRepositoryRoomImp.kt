@@ -59,8 +59,8 @@ class TournamentRepositoryRoomImp @Inject constructor(
                 if (players != null && matches != null) {
                     domainTournaments.add(tournament.toDomain(players, matches))
                 }
-                return domainTournaments
             }
+            return domainTournaments
         }
         return null
     }
