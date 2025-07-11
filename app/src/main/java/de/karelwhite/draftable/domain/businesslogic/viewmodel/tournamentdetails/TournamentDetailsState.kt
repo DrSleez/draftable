@@ -1,6 +1,5 @@
-package de.karelwhite.draftable.domain.viewmodel.tournamentdetails
+package de.karelwhite.draftable.domain.businesslogic.viewmodel.tournamentdetails
 
-import de.karelwhite.draftable.domain.model.Host
 import de.karelwhite.draftable.domain.model.Match
 import de.karelwhite.draftable.domain.model.Tournament
 

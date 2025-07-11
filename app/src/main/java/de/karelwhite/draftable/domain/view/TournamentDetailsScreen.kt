@@ -52,12 +52,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import de.karelwhite.draftable.domain.model.Match
 import de.karelwhite.draftable.domain.model.Player
 import de.karelwhite.draftable.domain.model.Tournament
-import de.karelwhite.draftable.domain.viewmodel.tournamentdetails.TournamentDetailsEvent
+import de.karelwhite.draftable.domain.businesslogic.viewmodel.tournamentdetails.TournamentDetailsEvent
 import de.karelwhite.draftable.domain.viewmodel.tournamentdetails.TournamentDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
