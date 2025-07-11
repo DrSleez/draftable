@@ -64,7 +64,7 @@ class StartViewModel @Inject constructor(
                     isLoading = true,
                     error = null
                 )
-            } // Zeige Ladezustand während der Erstellung
+            }
             try {
                 val newHostName = RandomNameGenerator.getRandomHostName()
                 val newHost = Host(name = newHostName)

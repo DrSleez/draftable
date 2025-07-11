@@ -1,18 +1,18 @@
-package de.karelwhite.draftable.domain.viewmodel.settings
+package de.karelwhite.draftable.domain.businesslogic.viewmodel.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.karelwhite.draftable.domain.model.Host
 import de.karelwhite.draftable.domain.repository.HostRepository
+import de.karelwhite.draftable.domain.viewmodel.settings.SettingsEvent
+import de.karelwhite.draftable.domain.viewmodel.settings.SettingsState
 import de.karelwhite.draftable.domain.viewmodel.utilities.RandomNameGenerator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-// Hilfsobjekt für zufällige Namen (kann auch außerhalb der Klasse sein)
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -49,13 +49,13 @@ class SettingsViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val host = hostRepository.getHost() // Suspend-Funktion
+                val host = hostRepository.getHost()
                 if (host != null) {
                     _uiState.update { currentState ->
                         currentState.copy(
                             isLoading = false,
                             host = host,
-                            name = host.name // Initialisiere das Namensfeld mit dem Hostnamen
+                            name = host.name
                         )
                     }
                 } else {
@@ -81,13 +81,10 @@ class SettingsViewModel @Inject constructor(
             return
         }
 
-        // Zeige einen Lade-/Speicherzustand, wenn gewünscht
-        // _uiState.update { it.copy(isLoading = true) } // Optional: Visuelles Feedback für Speichern
-
         viewModelScope.launch {
             try {
                 val updatedHost = currentHost.copy(name = currentName)
-                hostRepository.updateHost(updatedHost) // Annahme: updateHost ist eine suspend fun
+                hostRepository.updateHost(updatedHost)
 
                 _uiState.update { currentState ->
                     currentState.copy(
@@ -113,7 +110,7 @@ class SettingsViewModel @Inject constructor(
                     isLoading = true,
                     error = null
                 )
-            } // Zeige Ladezustand während der Erstellung
+            }
             try {
                 val newHostName = RandomNameGenerator.getRandomHostName()
                 val newHost = Host(name = newHostName)
@@ -138,7 +135,5 @@ class SettingsViewModel @Inject constructor(
                 }
             }
         }
-
-
     }
 }

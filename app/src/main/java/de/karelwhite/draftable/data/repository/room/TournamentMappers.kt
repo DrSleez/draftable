@@ -77,18 +77,18 @@ fun TournamentEntity.toDomain(
     if (matches != null) {
         domainMatches = matches.map { it.toDomain() } as MutableList<Match>
     }
-
-    return Tournament(
+    val tournament = Tournament(
         id = this.id,
         name = this.name,
         hostPlayerId = this.hostPlayerId,
         numberOfRounds = this.numberOfRounds,
-        isStarted = this.isStarted,
-        isFinished = this.isFinished,
-        currentRound = this.currentRound,
         players = domainPlayers,
         matches = domainMatches
     )
+    tournament.isStarted = this.isStarted
+    tournament.isFinished = this.isFinished
+    tournament.currentRound = this.currentRound
+    return tournament
 }
 
 /**

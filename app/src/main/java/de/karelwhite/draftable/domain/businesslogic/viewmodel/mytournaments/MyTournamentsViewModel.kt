@@ -3,6 +3,7 @@ package de.karelwhite.draftable.domain.viewmodel.mytournaments
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.karelwhite.draftable.domain.businesslogic.viewmodel.mytournaments.MyTournamentsState
 import de.karelwhite.draftable.domain.repository.HostRepository
 import de.karelwhite.draftable.domain.repository.TournamentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +23,6 @@ class MyTournamentsViewModel @Inject constructor(
     val uiState: StateFlow<MyTournamentsState> = _uiState.asStateFlow()
 
 
-
-
     fun onEvent(event: MyTournamentsEvent){
         when(event){
             is MyTournamentsEvent.DeleteTournament -> {
@@ -36,13 +35,23 @@ class MyTournamentsViewModel @Inject constructor(
                 _uiState.update { it.copy(toastMessage = null) }
             }
             MyTournamentsEvent.RefreshTournaments -> {
-                loadHostAndAssociatedTournaments()
+                val isInitialLoad = _uiState.value.host == null
+                if(isInitialLoad){
+                    loadHostAndAssociatedTournaments()
+                } else {
+                    _uiState.value.host?.id?.let { hostId ->
+                        _uiState.update { it.copy(isRefreshing = true) }
+                        loadTournamentsForHost(hostId)
+                    } ?: run {
+                        loadHostAndAssociatedTournaments()
+                    }
+                }
             }
         }
     }
 
     init {
-        loadHostAndAssociatedTournaments()
+        //loadHostAndAssociatedTournaments()
     }
 
     private fun deleteTournament(tournamentId: String) {
@@ -66,24 +75,28 @@ class MyTournamentsViewModel @Inject constructor(
     }
 
     private fun loadHostAndAssociatedTournaments() {
-        _uiState.update { it.copy(isLoading = true, error = null, tournaments = emptyList()) } // Reset state for loading
-
+        if(_uiState.value.isRefreshing){
+            //_uiState.update { it.copy(isRefreshing = true, error = null) }
+        } else {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+        }
         viewModelScope.launch {
             try {
-                val host = hostRepository.getHost() // Annahme: getHost() ist suspend und holt den aktuellen Host
+                val host = hostRepository.getHost()
                 if (host != null) {
                     _uiState.update { currentState ->
                         currentState.copy(
-                            isLoading = false,
+                            isLoading = true,
+                            isRefreshing = false,
                             host = host
                         )
                     }
-                    // Jetzt, da der Host geladen ist, lade seine Turniere
                     loadTournamentsForHost(host.id)
                 } else {
                     _uiState.update { currentState ->
                         currentState.copy(
                             isLoading = false,
+                            isRefreshing = false,
                             host = null,
                             error = "Kein Host gefunden."
                         )
@@ -93,6 +106,7 @@ class MyTournamentsViewModel @Inject constructor(
                 _uiState.update { currentState ->
                     currentState.copy(
                         isLoading = false,
+                        isRefreshing = false,
                         error = "Fehler beim Laden des Hosts: ${e.message}"
                     )
                 }
@@ -101,7 +115,11 @@ class MyTournamentsViewModel @Inject constructor(
     }
 
     private fun loadTournamentsForHost(hostId: String) {
-         _uiState.update { it.copy(isLoading = true, error = null)}
+        if(_uiState.value.isRefreshing){
+           // _uiState.update { it.copy(isRefreshing = true, error = null) }
+        } else {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+        }
 
         viewModelScope.launch {
             try {
@@ -110,6 +128,7 @@ class MyTournamentsViewModel @Inject constructor(
                     _uiState.update { currentState ->
                         currentState.copy(
                             isLoading = false,
+                            isRefreshing = false,
                             tournaments = emptyList(),
                         )
                     }
@@ -117,6 +136,7 @@ class MyTournamentsViewModel @Inject constructor(
                     _uiState.update { currentState ->
                         currentState.copy(
                             isLoading = false,
+                            isRefreshing = false,
                             tournaments = tournaments,
                             error = null
                         )
@@ -126,6 +146,7 @@ class MyTournamentsViewModel @Inject constructor(
                 _uiState.update { currentState ->
                     currentState.copy(
                         isLoading= false,
+                        isRefreshing = false,
                         error = "Fehler beim Laden der Turniere: ${e.message}"
                     )
                 }

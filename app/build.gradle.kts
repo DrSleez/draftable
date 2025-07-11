@@ -39,6 +39,12 @@ android {
     buildFeatures {
         compose = true
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
     buildToolsVersion = "35.0.0"
 }
 
@@ -62,11 +68,28 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    //testImplementation(libs.junit)
+    //androidTestImplementation(libs.androidx.junit)
+    //androidTestImplementation(libs.androidx.espresso.core)
+    //androidTestImplementation(platform(libs.androidx.compose.bom))
+    //androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    testImplementation(platform("org.junit:junit-bom:5.10.5"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+
+    // JUnit 5 für lokale Unit-Tests (src/test) - Versionen kommen von der BOM
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.params)
+
+    // Mockito für Mocking
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+
+    // Für Coroutine-Tests
+    testImplementation(libs.kotlinx.coroutines.test)
+
 }

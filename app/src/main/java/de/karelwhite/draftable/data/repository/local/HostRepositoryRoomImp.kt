@@ -20,7 +20,7 @@ class HostRepositoryRoomImp @Inject constructor(private val hostDao: HostDao) : 
 
     override suspend fun getHost(): DomainHost? {
         return withContext(Dispatchers.IO) {
-            val entityHost = hostDao.getHost() // This now runs on a background thread
+            val entityHost = hostDao.getHost()
             entityHost?.toDomain()
         }
     }

@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.karelwhite.draftable.domain.businesslogic.RoundGenerator
+import de.karelwhite.draftable.domain.businesslogic.viewmodel.tournamentdetails.TournamentDetailsEvent
+import de.karelwhite.draftable.domain.businesslogic.viewmodel.tournamentdetails.TournamentDetailsState
 import de.karelwhite.draftable.domain.repository.TournamentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -135,14 +137,14 @@ class TournamentDetailsViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     tournamentRepository.updateTournament(currentTournament.copy(isFinished = true))
-                } catch (e: Exception) { /* Fehlerbehandlung */ }
+                } catch (e: Exception) { println(e.message)}
             }
             return
         }
 
         val currentRoundMatches = currentTournament.matches
-            ?.filter { it.roundNumber == currentTournament.currentRound && it.player2Id != null } // Freilose ignorieren
-        if (currentRoundMatches?.any { !it.isFinished } == true) {
+            .filter { it.roundNumber == currentTournament.currentRound && it.player2Id != null } // Freilose ignorieren
+        if (currentRoundMatches.any { !it.isFinished }) {
             _uiState.update { it.copy(error = "Bitte zuerst alle Matches der aktuellen Runde (${currentTournament.currentRound}) abschließen.") }
             return
         }

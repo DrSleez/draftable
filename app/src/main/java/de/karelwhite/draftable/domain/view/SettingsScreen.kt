@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import de.karelwhite.draftable.domain.viewmodel.settings.SettingsEvent
-import de.karelwhite.draftable.domain.viewmodel.settings.SettingsViewModel
+import de.karelwhite.draftable.domain.businesslogic.viewmodel.settings.SettingsViewModel
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, navController: NavController) {

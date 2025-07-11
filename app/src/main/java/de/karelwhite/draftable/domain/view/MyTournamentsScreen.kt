@@ -52,11 +52,11 @@ fun MyTournamentsScreen(viewModel: MyTournamentsViewModel, navController: NavCon
     val context = LocalContext.current
     val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
 
-    // Lade Turniere neu, wenn der Screen resumed (zurückkehrt)
+    // Lade Turniere neu, wenn der Screen resumed
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                viewModel.onEvent(MyTournamentsEvent.LoadTournaments) // Deine Funktion im ViewModel zum Laden/Aktualisieren der Liste
+                viewModel.onEvent(MyTournamentsEvent.RefreshTournaments)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -76,8 +76,11 @@ fun MyTournamentsScreen(viewModel: MyTournamentsViewModel, navController: NavCon
         topBar = {
             TopAppBar(
                 title = {
-                    val hostName = uiState.host?.name ?: "Deine" // Annahme: host ist im uiState
-                    Text("$hostName's Turniere")
+                    val hostName = uiState.host?.name
+                    if (!uiState.isLoading || uiState.error != null) {
+                        Text("$hostName's Turniere")
+                    }
+
                 }
             )
         },
@@ -112,7 +115,7 @@ fun MyTournamentsScreen(viewModel: MyTournamentsViewModel, navController: NavCon
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
-                uiState.host == null && !uiState.isLoading -> {
+                uiState.host == null && !uiState.isLoading &&!uiState.isRefreshing -> {
                     Text(
                         text = "Kein Host gefunden.",
                         modifier = Modifier.align(Alignment.Center)
@@ -190,7 +193,6 @@ fun TournamentCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Turnierstatus basierend auf isStarted und isFinished
             val statusText = when {
                 tournament.isFinished -> "Beendet"
                 tournament.isStarted -> "Läuft"
@@ -207,7 +209,6 @@ fun TournamentCard(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Runde nur anzeigen, wenn das Turnier gestartet und noch nicht beendet ist
             if (tournament.isStarted && !tournament.isFinished) {
                 Text(
                     text = "Runde: ${tournament.currentRound} / ${tournament.numberOfRounds}",

@@ -6,8 +6,8 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [HostEntity::class, TournamentEntity::class, PlayerEntity::class, MatchEntity::class],
-    version = 3, // Increment this on schema changes
-    exportSchema = false // Set to true for production if you want to export schema for migrations
+    version = 3,
+    exportSchema = false
 )
 @TypeConverters(RoomConverters::class)
 abstract class DraftableDatabase : RoomDatabase() {
